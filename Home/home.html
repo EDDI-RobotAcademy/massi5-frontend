@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momogosso - Mobile Home New User</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee8c2b",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#221910",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+                        "sans": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#181411] dark:text-white overflow-hidden w-full h-screen relative flex justify-center">
+<div class="w-full max-w-[480px] h-full flex flex-col bg-background-light dark:bg-background-dark relative shadow-xl overflow-hidden">
+<!-- Top Bar / Header -->
+<header class="flex items-center justify-between px-6 pt-6 pb-2">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">lunch_dining</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#181411] dark:text-white">notifications</span>
+</button>
+</header>
+<!-- Scrollable Content Area -->
+<main class="flex-1 overflow-y-auto no-scrollbar pb-24">
+<!-- Greeting Section -->
+<section class="px-6 pt-4 pb-6">
+<h2 id="user-greeting" class="text-xl font-medium text-[#897561] dark:text-gray-400 mb-1">Hi !</h2>
+<h1 class="text-[28px] leading-tight font-bold text-[#181411] dark:text-white">
+                    오늘 점심을<br/>기록해보세요
+                </h1>
+</section>
+<!-- Main Action Card (Empty State) -->
+<section class="px-6 mb-8">
+<div class="w-full bg-white dark:bg-[#2A2018] rounded-2xl p-8 flex flex-col items-center justify-center shadow-sm border border-[#f4f2f0] dark:border-[#3a2e24] min-h-[320px] relative overflow-hidden group">
+<!-- Decorative background element -->
+<div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-primary/5 to-transparent pointer-events-none"></div>
+<!-- Illustration Placeholder -->
+<div class="relative w-40 h-40 mb-6 flex items-center justify-center">
+<div class="absolute w-full h-full bg-primary/10 rounded-full animate-pulse"></div>
+<div class="absolute w-3/4 h-3/4 bg-primary/20 rounded-full"></div>
+<span class="material-symbols-outlined text-6xl text-primary relative z-10" style="font-size: 64px;">restaurant</span>
+</div>
+<h3 class="text-lg font-bold text-[#181411] dark:text-white text-center mb-2">아직 기록된 점심이 없어요</h3>
+<p class="text-sm text-[#897561] dark:text-gray-400 text-center mb-8 max-w-[240px]">
+                        오늘 먹은 맛있는 점심을 기록하고<br/>나만의 푸드 다이어리를 시작해보세요.
+                    </p>
+<button  onclick="location.href='../Record/record.html'" class="w-full max-w-[280px] h-14 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all text-white font-bold text-base rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined">edit</span>
+<span>오늘 점심 기록하기</span>
+</button>
+</div>
+</section>
+<!-- Discovery Section -->
+<section class="px-6 pb-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-[#181411] dark:text-white">다른 점심 구경하기</h3>
+</div>
+<div class="bg-white dark:bg-[#2A2018] rounded-2xl p-5 shadow-sm border border-[#f4f2f0] dark:border-[#3a2e24] flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="flex -space-x-3 overflow-hidden">
+<img alt="User avatar 1" class="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-[#2A2018] object-cover" data-alt="Portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-21CxFM8gkFfLlwzhXIVzM324aA5ju6ukiFrDYJRpeRYJ7YOKDjMvW7A1ZFqR1VlL8LsudGL_2llGR71foJcEr0kUoknmT2kcF7Z18SjzsG2NVfcluNDSCFMfn92SRFzx3x5s1mz863adGgKqw0F04A4ttaCR0IM2Xx_owK8UTyeTNQz-tjT1DTqI_vYXHy8fRuHilMWbclQb9_aR5LCnOzKR8B8U6DPm6nmIYriBd3XX7_QO2cL23YS_0fa0_178eDiylFi2bXQ"/>
+<img alt="User avatar 2" class="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-[#2A2018] object-cover" data-alt="Portrait of a young man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjaOMVqO_J3lsvUFeywcbYONzWhkDSYrLlG2Jw2OL6y4ry8kZJG30Dgej3Nuuf6dAQbQ4SUdiYAPuUBLn-mmD1uCHbeYPeFCUkXTmQO5dP3j544-zT4MGNxSwt1Bn18NEfkmK-5VSH9rxJe8aArIU8-KwInEbySMRphgJnzPKJrbBYT3kW5FdvR6gh--2qyb2_0rpgdCed7Qt0wlsLaWzXBS63OtmlVQ7bDywC_MRZNOpEWJdiHN9u0ogpiyB2rXknocJZVNgFWBY"/>
+<div class="h-10 w-10 rounded-full ring-2 ring-white dark:ring-[#2A2018] bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-300">
+                                +12
+                            </div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-[#181411] dark:text-white">오늘의 추천 메뉴</span>
+<span class="text-xs text-[#897561] dark:text-gray-400">친구들이 무엇을 먹었는지 확인해보세요</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-[#f4f2f0] dark:bg-white/5 text-[#181411] dark:text-white hover:bg-gray-200 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="mt-4">
+<button class="w-full h-12 border border-[#e5e0db] dark:border-[#3a2e24] text-[#897561] dark:text-gray-300 font-medium rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<span>전체 피드 구경하기</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="absolute bottom-0 left-0 right-0 bg-white dark:bg-[#1E160F] border-t border-[#f4f2f0] dark:border-[#3a2e24] px-6 pb-6 pt-3 flex justify-between items-end z-50">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="home.html">
+<div class="text-primary flex items-center justify-center transition-transform group-active:scale-95">
+<span class="material-symbols-outlined fill-current" style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;">home</span>
+</div>
+<span class="text-xs font-bold text-primary">홈</span>
+</a>
+<!-- Log -->
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="../Record/record.html">
+<div class="text-[#9CA3AF] dark:text-gray-500 group-hover:text-[#897561] dark:group-hover:text-gray-400 flex items-center justify-center transition-transform group-active:scale-95">
+<span class="material-symbols-outlined">edit_square</span>
+</div>
+<span class="text-xs font-medium text-[#9CA3AF] dark:text-gray-500 group-hover:text-[#897561] dark:group-hover:text-gray-400">기록</span>
+</a>
+<!-- Community -->
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="text-[#9CA3AF] dark:text-gray-500 group-hover:text-[#897561] dark:group-hover:text-gray-400 flex items-center justify-center transition-transform group-active:scale-95">
+<span class="material-symbols-outlined">group</span>
+</div>
+<span class="text-xs font-medium text-[#9CA3AF] dark:text-gray-500 group-hover:text-[#897561] dark:group-hover:text-gray-400">커뮤니티</span>
+</a>
+<!-- My Page -->
+<a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="#">
+<div class="text-[#9CA3AF] dark:text-gray-500 group-hover:text-[#897561] dark:group-hover:text-gray-400 flex items-center justify-center transition-transform group-active:scale-95">
+<span class="material-symbols-outlined">person</span>
+</div>
+<span class="text-xs font-medium text-[#9CA3AF] dark:text-gray-500 group-hover:text-[#897561] dark:group-hover:text-gray-400">마이페이지</span>
+</a>
+</nav>
+</div>
+</body>
+<script>
+    // 여기에 로그인한 사람의 닉네임이 들어온다고 가정
+    // 나중에는 서버나 로그인 데이터에서 이 값을 자동으로 가져옴
+    const userNickname = "momogosso"; 
+
+    // 화면이 다 그려지면 실행
+    document.addEventListener("DOMContentLoaded", function() {
+        // 3. 아까 id="user-greeting" 이라고 이름표 달아둔 태그를 찾아서
+        const greetingElement = document.getElementById("user-greeting");
+        
+        // 4. 그 안의 글자를 "Hi 닉네임!" 으로 바꿔라
+        if (greetingElement) {
+            greetingElement.innerText = `Hi ${userNickname}!`;
+        }
+    });
+</script>
+</body>
+</html>
+</html>
