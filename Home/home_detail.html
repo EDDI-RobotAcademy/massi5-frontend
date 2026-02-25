@@ -49,7 +49,7 @@
 
             <main class="flex-1 overflow-y-auto px-6 pb-32">
                 <section class="py-6">
-                    <p class="text-gray-400 font-medium">Hi momogosso!</p>
+                    <h2 id="user-greeting" class="text-xl font-medium text-[#897561] dark:text-gray-400 mb-1">Hi, <span id="home-nickname">Momogosso</span>!</h2>
                     <h1 class="text-2xl font-bold leading-tight">오늘 점심 기록을<br/>완료했어요!</h1>
                 </section>
 
@@ -131,6 +131,18 @@
         </div>
 
         <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // 1. 저장된 닉네임 가져오기 (없으면 기본값 "Momogosso")
+                const savedNickname = localStorage.getItem('userNickname') || "Momogosso"; 
+                
+                // 2. 홈 화면의 닉네임 요소 찾기
+                const nicknameElement = document.getElementById("home-nickname");
+                
+                // 3. 텍스트 교체
+                if (nicknameElement) {
+                    nicknameElement.innerText = savedNickname;
+                }
+            });
              /**
              * [데이터 동기화 로직]
              * 페이지가 로드될 때 브라우저 저장소(localStorage)에서 
