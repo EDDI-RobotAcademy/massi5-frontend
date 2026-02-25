@@ -9,13 +9,13 @@
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet"/>
         <script id="tailwind-config">
             tailwind.config = {
-                darkMode: "class", //클래스 기반 다크모드 활성화
+                darkMode: "class",
                 theme: {
                     extend: {
                         colors: {
-                            "primary": "#F35C1B", // 메인컬러 
-                            "background-light": "#f8f7f6", // 밝은 테마 배경색
-                            "background-dark": "#221910",  // 다크 테마 배경색
+                            "primary": "#F35C1B",
+                            "background-light": "#f8f7f6",
+                            "background-dark": "#221910",
                         },
                         fontFamily: {
                             "display": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"],
@@ -27,80 +27,31 @@
             }
         </script>
         <style>
-            /* 전역 스타일 설정 */
-            body {
-                font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
-                -webkit-font-smoothing: antialiased;
-            }
-            /* 스크롤바 숨기기 (디자인을 위해) */
+            body { font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; min-height: max(884px, 100dvh); }
             .no-scrollbar::-webkit-scrollbar {display: none;}
-            .no-scrollbar {-ms-overflow-style: none;  /* IE and Edge */scrollbar-width: none;  /* Firefox */}
-
-            /* 최소 높이 설정 (모바일 화면 대응) */
-            body {
-                min-height: max(884px, 100dvh);
-            }
-
-            /* 탭 활성화 스타일 */
-            .tab-active {
-                background-color: #F35C1B !important;
-                color: white !important;
-                border-color: #F35C1B !important;
-            }
-            /* 게시글 카드 스타일 */
-            .post-card-shadow {
-                background: white;
-                border-radius: 24px;
-                border: 1px solid #f4f2f0;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            }
-            /* 별점 스타일 */
-            .star-filled { color: #F35C1B; font-variation-settings: 'FILL' 1; }
-            .star-empty { color: #D1C5BC; }
-
-            /* 반응형 버튼 디자인 */
-            .reaction-btn { 
-                display: flex; align-items: center; gap: 4px; 
-                padding: 6px 10px; border-radius: 12px; 
-                background: #f9f8f7; color: #897561; transition: all 0.2s;
-            }
-            /* 클릭 시 효과 (잠깐 작아짐) */
-            .reaction-btn:active { 
-                transform: scale(0.9);
-            } 
-            /* 클릭 후 활성화된 상태 (주황색 배경 + 흰색 글자) */
-            .reaction-btn.active { 
-                background-color: #F35C1B !important; 
-                color: white !important; 
-            }
-            /* 활성화 시 아이콘도 흰색으로 */
-            .reaction-btn.active span {
-                color: white !important;
-            }
+            .no-scrollbar {-ms-overflow-style: none; scrollbar-width: none;}
+            .tab-active { background-color: #F35C1B !important; color: white !important; border-color: #F35C1B !important; }
+            .post-card-shadow { background: white; border-radius: 24px; border: 1px solid #f4f2f0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+            .reaction-btn { display: flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 12px; background: #f9f8f7; color: #897561; transition: all 0.2s; }
+            .reaction-btn:active { transform: scale(0.9); } 
+            .reaction-btn.active { background-color: #F35C1B !important; color: white !important; }
+            .reaction-btn.active span { color: white !important; }
             .reaction-btn .count { font-size: 12px; font-weight: 600; }
-
-            /* 드롭다운 메뉴 스타일 */
-            .filter-menu {
-                display: none;
-                position: absolute;
-                top: 30px;
-                right: 0;
-                background: white;
-                border: 1px solid #f4f2f0;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                z-index: 100;
-                min-width: 100px;
-            }
+            .filter-menu { display: none; position: absolute; top: 30px; right: 0; background: white; border: 1px solid #f4f2f0; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; min-width: 100px; }
             .filter-menu.show { display: block; }
-            .filter-menu button {
-                width: 100%;
-                padding: 10px 16px;
-                text-align: left;
-                font-size: 13px;
-                color: #897561;
-            }
+            .filter-menu button { width: 100%; padding: 10px 16px; text-align: left; font-size: 13px; color: #897561; }
             .filter-menu button:hover { background: #f9f8f7; color: #F35C1B; }
+            
+            .delete-menu { position: absolute; right: 0; top: 35px; background: white; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 50; overflow: hidden; min-width: 100px; }
+
+            /* 토스트 및 팝업 애니메이션 (설정 페이지와 동일) */
+            @keyframes toast-slide {
+                0% { transform: translate(-50%, 100%); opacity: 0; }
+                15% { transform: translate(-50%, -20px); opacity: 1; }
+                85% { transform: translate(-50%, -20px); opacity: 1; }
+                100% { transform: translate(-50%, 100%); opacity: 0; }
+            }
+            .toast-animation { animation: toast-slide 2.5s ease-in-out forwards; }
         </style>
     </head>
    <body class="bg-background-light dark:bg-background-dark text-[#181411] dark:text-white overflow-hidden w-full h-screen relative flex justify-center">
@@ -141,14 +92,14 @@
                             <div style="width: 144px; height: 144px; left: 24px; top: 24px; position: absolute; background: white; box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05); border-radius: 9999px; justify-content: center; align-items: center; display: flex">
                                 <span class="material-symbols-outlined" style="font-size: 54px; color: #D1C5BC; font-variation-settings: 'wght' 300;">ramen_dining</span>
                             </div>
-                            <div style="width: 12px; height: 12px; left: 148px; top: 32px; position: absolute; opacity: 0.60; background: #F35C1B; border-radius: 9999px"></div>          
+                            <div style="width: 12px; height: 12px; left: 148px; top: 32px; position: absolute; opacity: 0.60; background: #F35C1B; border-radius: 9999px"></div>           
                             <div style="width: 8px; height: 8px; left: 40px; top: 144px; position: absolute; opacity: 0.40; background: #F35C1B; border-radius: 9999px"></div>
                         </div>
                     </div>
                     <h2 class="text-[22px] font-bold text-[#181411] mb-2">아직 이 카테고리 기록이 없어요</h2>
                     <p id="empty-msg" class="text-[#897561] mb-10">가장 먼저 맛있는 기록을 남겨보세요!</p>
 
-                    <div onclick="location.href='../Record/Record.html'" 
+                    <div onclick="location.href='new_record.html'" 
                         style="width: 280px; height: 56px; background: #F35C1B; border-radius: 24px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer; box-shadow: 0px 4px 6px -4px rgba(243, 92, 27, 0.30), 0px 10px 15px -3px rgba(243, 92, 27, 0.30);">
                         <span class="material-symbols-outlined" style="color: white; font-size: 20px;">edit</span>
                         <span style="color: white; font-size: 16px; font-family: 'Noto Sans KR'; font-weight: 700; line-height: 24px; white-space: nowrap;">
@@ -157,6 +108,11 @@
                     </div>
                 </div>
             </main>
+
+            <button onclick="location.href='new_record.html'" 
+                class="fixed bottom-24 right-[calc(50%-220px)] sm:right-[calc(50%-210px)] w-14 h-14 bg-primary text-white rounded-full shadow-[0_8px_30px_rgb(243,92,27,0.4)] flex items-center justify-center z-[100] active:scale-95 transition-all">
+                <span class="material-symbols-outlined" style="font-size: 28px;">edit_square</span>
+            </button>
 
             <nav class="absolute bottom-0 left-0 right-0 bg-white dark:bg-[#1E160F] border-t border-[#f4f2f0] dark:border-[#3a2e24] px-6 pb-6 pt-3 flex justify-between items-center z-50">
                 <a class="flex flex-col items-center justify-center gap-1 min-w-[64px] group" href="../Home/home.html">
@@ -184,10 +140,35 @@
                     <span class="text-xs font-medium text-[#9CA3AF] group-hover:text-primary">마이페이지</span>
                 </a>
             </nav>
+
+            <div id="delete-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[110] opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeDeletePopup()"></div>
+            <div id="delete-popup" class="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto bg-white dark:bg-[#2A2018] rounded-t-[32px] p-6 pb-12 z-[120] transform translate-y-full transition-transform duration-300 shadow-[0_-8px_30px_rgb(0,0,0,0.12)]">
+                <div class="w-12 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-8"></div>
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-red-50 dark:bg-red-900/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-red-500 text-3xl">delete</span>
+                    </div>
+                    <h2 class="text-xl font-bold dark:text-white">기록을 삭제하시겠습니까?</h2>
+                    <p class="text-sm text-gray-500 mt-2">삭제된 기록은 복구할 수 없으며<br>커뮤니티 목록에서 사라집니다.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="closeDeletePopup()" class="flex-1 h-14 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300 font-bold rounded-2xl transition-all active:scale-95">취소</button>
+                    <button id="confirm-delete-btn" class="flex-1 h-14 bg-red-500 text-white font-bold rounded-2xl shadow-lg shadow-red-500/20 transition-all active:scale-95">삭제하기</button>
+                </div>
+            </div>
+
+            <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] pointer-events-none w-full max-w-[340px] px-4 hidden">
+                <div class="bg-[#181411] dark:bg-white text-white dark:text-[#181411] px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 justify-center">
+                    <div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white shrink-0">
+                        <span class="material-symbols-outlined text-[14px] font-bold">check</span>
+                    </div>
+                    <span id="toast-message" class="font-bold text-sm">기록이 삭제되었습니다</span>
+                </div>
+            </div>
+
         </div>
 
         <script>
-            // 1. 데이터 명단
             const communityData = [
                 {
                     postId: 101,
@@ -219,13 +200,19 @@
                     reactions: { heart: 20, thumb: 10, clap: 5, smile: 8 },
                     userReactions: { heart: false, thumb: false, clap: false, smile: false }
                 }
-                // ... 추가 데이터는 생략 가능
             ];
-            // 상태 관리 변수
-            let currentCategory = '전체';
-            let currentSort = 'latest'; 
 
-            // 2. 화면에 게시글을 그리는 함수 (하나로 통합)
+            let currentCategory = '전체';
+            let currentSort = 'latest';
+            let allData = [];
+            let pendingDeleteId = null; // 삭제 대기 중인 ID
+
+            function loadLocalPosts() {
+                const localPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+                const markedLocalPosts = localPosts.map(p => ({...p, isMine: true}));
+                allData = [...markedLocalPosts, ...communityData];
+            }
+
             function renderPosts(filter = '전체') {
                 const postList = document.getElementById('post-list');
                 const emptyState = document.getElementById('empty-state');
@@ -233,11 +220,10 @@
                 
                 postList.innerHTML = '';
                 
-                // [필터링 로직]
                 let filteredData = filter === '전체' 
-                    ? [...communityData] 
-                    : communityData.filter(post => post.tags.some(tag => tag.includes(filter)));
-                // [정렬 로직]
+                    ? [...allData] 
+                    : allData.filter(post => post.tags.some(tag => tag.includes(filter)));
+
                 if (currentSort === 'popular') {
                     filteredData.sort((a, b) => {
                         const sumA = Object.values(a.reactions).reduce((acc, curr) => acc + curr, 0);
@@ -245,9 +231,9 @@
                         return sumB - sumA;
                     });
                 } else {
-                    filteredData.sort((a, b) => b.postId - a.postId);
+                    filteredData.sort((a, b) => Number(b.postId) - Number(a.postId));
                 }
-                // [데이터 없음 처리]
+
                 if (filteredData.length === 0) {
                     postList.classList.add('hidden');
                     sortContainer.classList.add('hidden');
@@ -260,7 +246,6 @@
                 sortContainer.classList.remove('hidden');
                 emptyState.classList.add('hidden');
 
-                // [실제 드로잉 로직]
                 filteredData.forEach(post => {
                     const hasImage = post.imageUrl ? `
                         <div class="w-full h-56 mt-4 rounded-2xl overflow-hidden border border-gray-100">
@@ -270,6 +255,19 @@
                     const tagsHtml = post.tags.map(tag => `
                         <span class="text-xs font-medium text-primary bg-primary/5 px-2.5 py-1 rounded-lg">${tag}</span>
                     `).join('');
+
+                    const moreMenu = post.isMine ? `
+                        <div class="relative">
+                            <button onclick="toggleDeleteMenu(event, ${post.postId})" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+                                <span class="material-symbols-outlined text-[#D1C5BC]">more_horiz</span>
+                            </button>
+                            <div id="delete-menu-${post.postId}" class="delete-menu hidden">
+                                <button onclick="openDeletePopup(${post.postId})" class="w-full px-4 py-3 text-sm text-red-500 font-bold hover:bg-red-50 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">delete</span>삭제하기
+                                </button>
+                            </div>
+                        </div>
+                    ` : `<span class="material-symbols-outlined text-[#D1C5BC]">more_horiz</span>`;
 
                     const postHtml = `
                         <div class="post-card-shadow p-5 animate-in fade-in slide-in-from-bottom-4 duration-500 mb-6">
@@ -281,7 +279,7 @@
                                         <p class="text-[11px] text-[#897561]">${post.author.level} · ${post.timeAgo}</p>
                                     </div>
                                 </div>
-                                <span class="material-symbols-outlined text-[#D1C5BC]">more_horiz</span>
+                                ${moreMenu}
                             </div>
                             <p class="text-[15px] leading-relaxed text-[#181411]">${post.content}</p>
                             ${hasImage}
@@ -309,49 +307,99 @@
                 });
             }
 
-            // 3. 필터 및 정렬 관련 함수들
+            // --- 팝업 & 토스트 로직 (수정된 부분) ---
+            function openDeletePopup(postId) {
+                pendingDeleteId = postId;
+                document.getElementById('delete-overlay').classList.add('opacity-100', 'pointer-events-auto');
+                document.getElementById('delete-popup').classList.remove('translate-y-full');
+            }
+
+            function closeDeletePopup() {
+                document.getElementById('delete-overlay').classList.remove('opacity-100', 'pointer-events-auto');
+                document.getElementById('delete-popup').classList.add('translate-y-full');
+                pendingDeleteId = null;
+            }
+
+            document.getElementById('confirm-delete-btn').addEventListener('click', function() {
+                if (pendingDeleteId) {
+                    deletePost(pendingDeleteId);
+                    closeDeletePopup();
+                    showToast("기록이 삭제되었습니다");
+                }
+            });
+
+            function showToast(msg) {
+                const toast = document.getElementById('toast');
+                const toastMsg = document.getElementById('toast-message');
+                toastMsg.innerText = msg;
+                toast.classList.remove('hidden');
+                toast.classList.add('toast-animation');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('toast-animation');
+                }, 2500);
+            }
+            // ------------------------------------
+
+            function deletePost(postId) {
+                let localPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+                localPosts = localPosts.filter(p => p.postId !== postId);
+                localStorage.setItem('myPosts', JSON.stringify(localPosts));
+                loadLocalPosts();
+                renderPosts(currentCategory);
+            }
+
+            function toggleDeleteMenu(event, postId) {
+                event.stopPropagation();
+                document.querySelectorAll('.delete-menu').forEach(menu => {
+                    if (menu.id !== `delete-menu-${postId}`) menu.classList.add('hidden');
+                });
+                const menu = document.getElementById(`delete-menu-${postId}`);
+                menu.classList.toggle('hidden');
+            }
+
             function changeCategory(category) {
                 currentCategory = category;
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.remove('tab-active');
-                });
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
                 const activeTab = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.innerText.includes(category));
                 if (activeTab) activeTab.classList.add('tab-active');
                 renderPosts(category);
             }
+
             function toggleFilterMenu() {
                 document.getElementById('filter-menu').classList.toggle('show');
             }
+
             function changeSort(sortType) {
                 currentSort = sortType;
                 document.getElementById('current-sort-text').innerText = sortType === 'latest' ? '최신순' : '인기순';
                 document.getElementById('filter-menu').classList.remove('show');
                 renderPosts(currentCategory);
             }
+
             function handleReaction(postId, type) {
-                const post = communityData.find(p => p.postId === postId);
+                const post = allData.find(p => p.postId === postId);
                 if (!post) return;
                 const isAlreadyPressed = post.userReactions[type];
-                if (isAlreadyPressed) {
-                    post.reactions[type]--;
-                } else {
-                    post.reactions[type]++;
-                }
+                post.reactions[type] += isAlreadyPressed ? -1 : 1;
                 post.userReactions[type] = !isAlreadyPressed;
                 renderPosts(currentCategory); 
             }
-            // 초기화
+
             window.onload = () => {
+                loadLocalPosts();
                 changeCategory('전체');
             };
 
-            // 외부 클릭 시 메뉴 닫기
             window.onclick = function(event) {
                 if (!event.target.closest('#sort-container')) {
                     const menu = document.getElementById('filter-menu');
                     if(menu) menu.classList.remove('show');
                 }
-            }   
+                if (!event.target.closest('.relative')) {
+                    document.querySelectorAll('.delete-menu').forEach(menu => menu.classList.add('hidden'));
+                }
+            }
         </script>
     </body>
 </html>
