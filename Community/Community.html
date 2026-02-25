@@ -57,6 +57,50 @@
             /* 별점 스타일 */
             .star-filled { color: #F35C1B; font-variation-settings: 'FILL' 1; }
             .star-empty { color: #D1C5BC; }
+
+            /* 반응형 버튼 디자인 */
+            .reaction-btn { 
+                display: flex; align-items: center; gap: 4px; 
+                padding: 6px 10px; border-radius: 12px; 
+                background: #f9f8f7; color: #897561; transition: all 0.2s;
+            }
+            /* 클릭 시 효과 (잠깐 작아짐) */
+            .reaction-btn:active { 
+                transform: scale(0.9);
+            } 
+            /* 클릭 후 활성화된 상태 (주황색 배경 + 흰색 글자) */
+            .reaction-btn.active { 
+                background-color: #F35C1B !important; 
+                color: white !important; 
+            }
+            /* 활성화 시 아이콘도 흰색으로 */
+            .reaction-btn.active span {
+                color: white !important;
+            }
+            .reaction-btn .count { font-size: 12px; font-weight: 600; }
+
+            /* 드롭다운 메뉴 스타일 */
+            .filter-menu {
+                display: none;
+                position: absolute;
+                top: 30px;
+                right: 0;
+                background: white;
+                border: 1px solid #f4f2f0;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                z-index: 100;
+                min-width: 100px;
+            }
+            .filter-menu.show { display: block; }
+            .filter-menu button {
+                width: 100%;
+                padding: 10px 16px;
+                text-align: left;
+                font-size: 13px;
+                color: #897561;
+            }
+            .filter-menu button:hover { background: #f9f8f7; color: #F35C1B; }
         </style>
     </head>
    <body class="bg-background-light dark:bg-background-dark text-[#181411] dark:text-white overflow-hidden w-full h-screen relative flex justify-center">
@@ -76,11 +120,16 @@
             </header>
 
             <main id="main-content" class="flex-1 overflow-y-auto px-6 pb-24 no-scrollbar">
-                <div class="flex justify-end my-4" id="sort-container">
-                    <button class="flex items-center gap-1 text-[#897561]">
+                <div class="flex justify-end my-4 relative" id="sort-container">
+                    <button onclick="toggleFilterMenu()" class="flex items-center gap-1 text-[#897561]">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7H21M6 12H18M10 17H14" stroke="#897561" stroke-width="2" stroke-linecap="round"/></svg>
-                        <span class="text-xs font-medium">최신순</span>
+                        <span id="current-sort-text" class="text-xs font-medium">최신순</span>
                     </button>
+                    
+                    <div id="filter-menu" class="filter-menu">
+                        <button onclick="changeSort('latest')">최신순</button>
+                        <button onclick="changeSort('popular')">인기순</button>
+                    </div>
                 </div>
 
                 <div id="post-list" class="space-y-6"></div>
@@ -138,66 +187,171 @@
         </div>
 
         <script>
-            const posts = [
-                { id: 1, user: '국밥지키미', time: '12분 전', category: '한식', menu: '얼큰 제육볶음', rating: 4, likes: 12, image: 'https://images.unsplash.com/photo-1664478147604-035133604f87?auto=format&fit=crop&q=80&w=500' },
-                { id: 2, user: '건강식러버', time: '42분 전', category: '양식', menu: '서브웨이 샌드위치', rating: 5, likes: 8, image: null }
-            ];
-
-            function changeCategory(cat) {
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    const isActive = (cat === '전체' && btn.innerText === '전체') || btn.innerText.includes(cat);
-                    btn.classList.toggle('tab-active', isActive);
-                });
-                const filtered = cat === '전체' ? posts : posts.filter(p => p.category === cat);
-                render(filtered, cat);
-            }
-
-            function createStars(rating) {
-                const labels = ["별로예요", "그저 그래요", "보통이에요", "맛있어요", "최고예요!"];
-                let html = '<div class="flex gap-0.5 mb-2 items-center">';
-                for (let i = 1; i <= 5; i++) {
-                    html += `<span class="material-symbols-outlined text-[18px] ${i <= rating ? "star-filled" : "star-empty"}">star</span>`;
+            // 1. 데이터 명단
+            const communityData = [
+                {
+                    postId: 101,
+                    author: { name: "면치기달인", level: "Lv.4 미식가", profileImg: "https://api.dicebear.com/7.x/avataaars/svg?seed=Noodle" },
+                    timeAgo: "10분 전",
+                    content: "오늘 점심은 회사 근처 새로 생긴 라멘집 갔는데 대박이네요! 국물이 진짜 찐하고 차슈가 입에서 녹아요 🍜 다들 맛점하셨나요?",
+                    tags: ["#점심추천", "#라멘", "#중식"],
+                    imageUrl: "https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&w=600&q=80",
+                    reactions: { heart: 12, thumb: 5, clap: 3, smile: 2 },
+                    userReactions: { heart: false, thumb: false, clap: false, smile: false }
+                },
+                {
+                    postId: 102,
+                    author: { name: "다이어터_지윤", level: "Lv.2 새싹", profileImg: "https://api.dicebear.com/7.x/avataaars/svg?seed=Diet" },
+                    timeAgo: "1시간 전",
+                    content: "어제 과식해서 오늘은 가볍게 포케 샐러드로 합의 봤습니다 🥲 연어 추가는 못 참죠! 오후에 배고플까 봐 벌써 걱정되네요...",
+                    tags: ["#식단관리", "#포케", "#양식"],
+                    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
+                    reactions: { heart: 8, thumb: 2, clap: 1, smile: 5 },
+                    userReactions: { heart: false, thumb: false, clap: false, smile: false }
+                },
+                {
+                    postId: 103,
+                    author: { name: "혼밥마스터", level: "Lv.5 쩝쩝박사", profileImg: "https://api.dicebear.com/7.x/avataaars/svg?seed=Master" },
+                    timeAgo: "3시간 전",
+                    content: "비 오는 날엔 역시 파전에 막걸리...가 아니라 김치볶음밥이죠. 집에서 뚝딱 만들었는데 반숙 계란후라이가 예술로 됐습니다 🍳",
+                    tags: ["#집밥", "#김치볶음밥", "#한식"],
+                    imageUrl: null, 
+                    reactions: { heart: 20, thumb: 10, clap: 5, smile: 8 },
+                    userReactions: { heart: false, thumb: false, clap: false, smile: false }
                 }
-                html += `<span class="ml-2 text-xs font-bold text-[#F35C1B]">${labels[rating - 1]}</span></div>`;
-                return html;
-            }
+                // ... 추가 데이터는 생략 가능
+            ];
+            // 상태 관리 변수
+            let currentCategory = '전체';
+            let currentSort = 'latest'; 
 
-            function render(data, cat) {
-                const list = document.getElementById('post-list');
-                const empty = document.getElementById('empty-state');
-                const sort = document.getElementById('sort-container');
-                const msg = document.getElementById('empty-msg');
-                list.innerHTML = '';
-
-                if (data.length === 0) {
-                    list.classList.add('hidden'); sort.classList.add('hidden'); empty.classList.remove('hidden');
-                    msg.innerText = `가장 먼저 맛있는 ${cat} 기록을 남겨보세요!`;
+            // 2. 화면에 게시글을 그리는 함수 (하나로 통합)
+            function renderPosts(filter = '전체') {
+                const postList = document.getElementById('post-list');
+                const emptyState = document.getElementById('empty-state');
+                const sortContainer = document.getElementById('sort-container');
+                
+                postList.innerHTML = '';
+                
+                // [필터링 로직]
+                let filteredData = filter === '전체' 
+                    ? [...communityData] 
+                    : communityData.filter(post => post.tags.some(tag => tag.includes(filter)));
+                // [정렬 로직]
+                if (currentSort === 'popular') {
+                    filteredData.sort((a, b) => {
+                        const sumA = Object.values(a.reactions).reduce((acc, curr) => acc + curr, 0);
+                        const sumB = Object.values(b.reactions).reduce((acc, curr) => acc + curr, 0);
+                        return sumB - sumA;
+                    });
                 } else {
-                    list.classList.remove('hidden'); sort.classList.remove('hidden'); empty.classList.add('hidden');
-                    data.forEach(p => {
-                        list.innerHTML += `
-                            <article class="post-card-shadow p-5 mb-4 relative">
-                                <div class="flex items-center gap-3 mb-4">
-                                    <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-lg">😊</div>
-                                    <div class="flex-1 font-bold text-sm">${p.user}<br><span class="text-xs font-normal text-gray-400">${p.time}</span></div>
-                                </div>
-                                ${createStars(p.rating)}
-                                <h4 class="text-lg font-bold text-[#181411] mb-3">${p.menu}</h4>
-                                ${p.image ? `<img src="${p.image}" class="w-full aspect-video object-cover rounded-2xl mb-4">` : ''}
-                                <div style="padding: 4px 8px; background: #F3F4F6; border-radius: 6px; display: inline-flex; margin-bottom: 4px;">
-                                    <span style="color: #897561; font-size: 10px; font-weight: 600;">${p.category}</span>
-                                </div>
-                                <div class="w-full h-[1px] bg-[#f4f2f0] my-4"></div>
-                                <div class="flex gap-2">
-                                    <div style="padding: 6px 14px; background: #F9FAFB; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #F3F4F6;">
-                                        <span>👍</span> <span style="color: #F35C1B; font-size: 13px; font-weight: 700;">${p.likes}</span>
+                    filteredData.sort((a, b) => b.postId - a.postId);
+                }
+                // [데이터 없음 처리]
+                if (filteredData.length === 0) {
+                    postList.classList.add('hidden');
+                    sortContainer.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    document.getElementById('empty-msg').innerText = `'${filter}' 카테고리에 등록된 기록이 아직 없어요.`;
+                    return;
+                }
+
+                postList.classList.remove('hidden');
+                sortContainer.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+
+                // [실제 드로잉 로직]
+                filteredData.forEach(post => {
+                    const hasImage = post.imageUrl ? `
+                        <div class="w-full h-56 mt-4 rounded-2xl overflow-hidden border border-gray-100">
+                            <img src="${post.imageUrl}" class="w-full h-full object-cover" alt="식단 이미지">
+                        </div>` : '';
+
+                    const tagsHtml = post.tags.map(tag => `
+                        <span class="text-xs font-medium text-primary bg-primary/5 px-2.5 py-1 rounded-lg">${tag}</span>
+                    `).join('');
+
+                    const postHtml = `
+                        <div class="post-card-shadow p-5 animate-in fade-in slide-in-from-bottom-4 duration-500 mb-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="${post.author.profileImg}" class="w-10 h-10 rounded-full bg-gray-100">
+                                    <div>
+                                        <p class="text-sm font-bold text-[#181411]">${post.author.name}</p>
+                                        <p class="text-[11px] text-[#897561]">${post.author.level} · ${post.timeAgo}</p>
                                     </div>
                                 </div>
-                            </article>`;
-                    });
-                }
+                                <span class="material-symbols-outlined text-[#D1C5BC]">more_horiz</span>
+                            </div>
+                            <p class="text-[15px] leading-relaxed text-[#181411]">${post.content}</p>
+                            ${hasImage}
+                            <div class="flex flex-wrap gap-2 mt-4">${tagsHtml}</div>
+                            <div class="flex items-center gap-2 mt-5 pt-4 border-t border-[#f4f2f0]">
+                                <button onclick="handleReaction(${post.postId}, 'heart')" class="reaction-btn ${post.userReactions.heart ? 'active' : ''}">
+                                    <span class="material-symbols-outlined ${post.userReactions.heart ? '' : 'text-red-500'}">favorite</span>
+                                    <span class="count">${post.reactions.heart}</span>
+                                </button>
+                                <button onclick="handleReaction(${post.postId}, 'thumb')" class="reaction-btn ${post.userReactions.thumb ? 'active' : ''}">
+                                    <span class="material-symbols-outlined ${post.userReactions.thumb ? '' : 'text-blue-500'}">thumb_up</span>
+                                    <span class="count">${post.reactions.thumb}</span>
+                                </button>
+                                <button onclick="handleReaction(${post.postId}, 'clap')" class="reaction-btn ${post.userReactions.clap ? 'active' : ''}">
+                                    <span class="material-symbols-outlined ${post.userReactions.clap ? '' : 'text-orange-400'}">celebration</span>
+                                    <span class="count">${post.reactions.clap}</span>
+                                </button>
+                                <button onclick="handleReaction(${post.postId}, 'smile')" class="reaction-btn ${post.userReactions.smile ? 'active' : ''}">
+                                    <span class="material-symbols-outlined ${post.userReactions.smile ? '' : 'text-yellow-500'}">sentiment_satisfied</span>
+                                    <span class="count">${post.reactions.smile}</span>
+                                </button>
+                            </div>
+                        </div>`;
+                    postList.insertAdjacentHTML('beforeend', postHtml);
+                });
             }
-            changeCategory('전체');
+
+            // 3. 필터 및 정렬 관련 함수들
+            function changeCategory(category) {
+                currentCategory = category;
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                });
+                const activeTab = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.innerText.includes(category));
+                if (activeTab) activeTab.classList.add('tab-active');
+                renderPosts(category);
+            }
+            function toggleFilterMenu() {
+                document.getElementById('filter-menu').classList.toggle('show');
+            }
+            function changeSort(sortType) {
+                currentSort = sortType;
+                document.getElementById('current-sort-text').innerText = sortType === 'latest' ? '최신순' : '인기순';
+                document.getElementById('filter-menu').classList.remove('show');
+                renderPosts(currentCategory);
+            }
+            function handleReaction(postId, type) {
+                const post = communityData.find(p => p.postId === postId);
+                if (!post) return;
+                const isAlreadyPressed = post.userReactions[type];
+                if (isAlreadyPressed) {
+                    post.reactions[type]--;
+                } else {
+                    post.reactions[type]++;
+                }
+                post.userReactions[type] = !isAlreadyPressed;
+                renderPosts(currentCategory); 
+            }
+            // 초기화
+            window.onload = () => {
+                changeCategory('전체');
+            };
+
+            // 외부 클릭 시 메뉴 닫기
+            window.onclick = function(event) {
+                if (!event.target.closest('#sort-container')) {
+                    const menu = document.getElementById('filter-menu');
+                    if(menu) menu.classList.remove('show');
+                }
+            }   
         </script>
     </body>
 </html>
