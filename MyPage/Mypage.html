@@ -56,7 +56,7 @@
         <main class="flex-1 overflow-y-auto no-scrollbar pb-24">
             <section class="px-6 pt-6 pb-8 flex flex-col items-center">
                 <div class="w-24 h-24 rounded-full bg-gray-200 overflow-hidden mb-4 border-4 border-white shadow-sm">
-                    <img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-21CxFM8gkFfLlwzhXIVzM324aA5ju6ukiFrDYJRpeRYJ7YOKDjMvW7A1ZFqR1VlL8LsudGL_2llGR71foJcEr0kUoknmT2kcF7Z18SjzsG2NVfcluNDSCFMfn92SRFzx3x5s1mz863adGgKqw0F04A4ttaCR0IM2Xx_owK8UTyeTNQz-tjT1DTqI_vYXHy8fRuHilMWbclQb9_aR5LCnOzKR8B8U6DPm6nmIYriBd3XX7_QO2cL23YS_0fa0_178eDiylFi2bXQ"/>
+                    <img alt="Profile" class="w-full h-full object-cover" src="https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611734.jpg?semt=ais_hybrid&w=740&q=80"/>
                 </div>
                 <h2 id="nickname" class="text-xl font-bold mb-2 text-[#181411]">닉네임</h2>
                 <div class="flex flex-row items-center gap-2">
@@ -135,78 +135,124 @@
                 <button onclick="closePopup()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="bg-gray-50 p-4 rounded-2xl flex items-center gap-4 mb-6">
-                <div class="w-20 h-20 rounded-xl bg-gray-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover"></div>
-                <div class="flex-1"><h3 class="text-lg font-bold">김치찌개</h3><p class="text-sm text-gray-400">역삼동 대독장</p></div>
+                <div class="w-20 h-20 rounded-xl bg-gray-200 overflow-hidden">
+                    <img id="popup-img" src="" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                    <h3 id="popup-menu" class="text-lg font-bold">김치찌개</h3>
+                    <div id="popup-subtext" class="flex text-primary mt-1"></div>
+                </div>
             </div>
             <button class="w-full h-14 bg-primary text-white font-bold rounded-2xl shadow-lg">기록 상세 보기</button>
         </div>
     </div>
 
     <script>
-        function openPopup() {
-            document.getElementById('overlay').classList.add('opacity-100', 'pointer-events-auto');
-            document.getElementById('popup').classList.remove('translate-y-full');
-        }
+        // 1. 팝업 제어 기초 기능 (기존 유지)
         function closePopup() {
             document.getElementById('overlay').classList.remove('opacity-100', 'pointer-events-auto');
             document.getElementById('popup').classList.add('translate-y-full');
         }
-
-        // 여기에 로그인한 사람의 닉네임이 들어온다고 가정
-        // 나중에는 서버나 로그인 데이터에서 이 값을 자동으로 가져옴
-        const userNickname = "Momogosso"; 
-
+    
+        // 2. 별점 모양(HTML) 생성기 (새로 추가)
+        function getStarHtml(rating) {
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                stars += `<span class="material-symbols-outlined text-[18px] ${i < rating ? 'fill-current' : 'text-gray-200'}" 
+                          style="font-variation-settings: 'FILL' ${i < rating ? 1 : 0}">star</span>`;
+            }
+            return stars;
+        }
+    
+        // 3. 팝업 열기 및 날짜별 데이터 교체 (업그레이드)
+        function openPopup(year, month, date) {
+            const popupDateTitle = document.querySelector('#popup h2');
+            const popupImg = document.querySelector('#popup-img');
+            const popupMenu = document.getElementById('popup-menu');
+            const popupSubtext = document.getElementById('popup-subtext');
+    
+            // 제목 날짜 변경 (기존 유지)
+            if (popupDateTitle) popupDateTitle.innerText = `${month}월 ${date}일`;
+    
+            // 날짜별 데이터 정의 (지현 팀장님 맞춤형)
+            const diaryData = {
+                10: { 
+                    menu: "연어 초밥 세트", 
+                    rating: 4, 
+                    img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400" 
+                },
+                25: { 
+                    menu: "바삭한 돈까스", 
+                    rating: 4, 
+                    img: "https://i.namu.wiki/i/EL2DPCSqSOBJcs_NRVfi9ZUbzB98sFMSyB3SYk99XbNvFOXgFGID-_dYM_kmIg2J8Nkg-Y8XcHE8H9C1KoZKtIV_X8I4tcDMrDjMN99jn7aFhdyeOLC2QuGTWyo2toOUrDWhA2Co0PNQT42R5a1FVQ.webp" 
+                },
+                20: { 
+                    menu: "마라탕 (2단계)", 
+                    rating: 5, 
+                    img: "https://i.namu.wiki/i/BjexV0bgpFYQQrjPV2LIMb_90Ec4_xl241GtYEvlnybnmGc9oLj9QZ_1iUsQC1zR1FgQniVmxpNTDyhDwBxi3dfK0NSIQFoGndx-0fPpWp4BYh1XJaHKf_7j1ENi8-Av0gsdzZSMtUtnhNwpd8HU2A.webp" 
+                },
+                default: { 
+                    menu: "김치찌개", 
+                    rating: 3, 
+                    img: "https://i.namu.wiki/i/tSGUuUVfOAzKUbvzxvcF_Cl3p2tSu_szb-UPTMIqV0akT00HgM9wX7urOu3qTRlarpNSlrqUp2jSbuj5OA2uBMJfyVV_uibzuQt0SKkbBOIiDwJKlCsULscQTzBzo73ICTaf4nBUuCb2UPn7ROQAzw.webp" 
+                }
+            };
+    
+            const currentData = diaryData[date] || diaryData.default;
+    
+            // 화면 내용 교체
+            if (popupMenu) popupMenu.innerText = currentData.menu;
+            if (popupImg) {
+                popupImg.src = currentData.img;
+                popupImg.alt = currentData.menu;
+            }
+            if (popupSubtext) popupSubtext.innerHTML = getStarHtml(currentData.rating);
+    
+            // 팝업 등장 (기존 유지)
+            document.getElementById('overlay').classList.add('opacity-100', 'pointer-events-auto');
+            document.getElementById('popup').classList.remove('translate-y-full');
+        }
+    
+        // 4. 닉네임 및 캘린더 초기화 로직 (기존 유지)
         document.addEventListener("DOMContentLoaded", function() {
-            updateNickname(); // 처음 로드될 때 실행
+            updateNickname();
             renderCalendar();
         });
-
-        // 페이지가 다시 보여질 때(뒤로가기로 돌아왔을 때 등) 데이터를 새로고침
+    
         window.onpageshow = function(event) {
             updateNickname();
         };
-
+    
         function updateNickname() {
             const nicknameElement = document.getElementById("nickname");
-            // 'userNickname'이 있으면 가져오고, 없으면 기본값 "Momogosso" 사용
             const savedNickname = localStorage.getItem('userNickname') || "Momogosso"; 
-            
-            if (nicknameElement) {
-                nicknameElement.innerText = savedNickname;
-            }
+            if (nicknameElement) nicknameElement.innerText = savedNickname;
         }
-
+    
         function renderCalendar() {
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth();
-
             document.getElementById('calendar-month-title').innerText = `${year}년 ${month + 1}월`;
-
+    
             const calendarDays = document.getElementById('calendar-days');
             calendarDays.innerHTML = '';
-
+    
             const firstDay = new Date(year, month, 1).getDay();
             const lastDate = new Date(year, month + 1, 0).getDate();
-
-            // 빈 칸 생성
+    
             for (let i = 0; i < firstDay; i++) {
                 calendarDays.appendChild(document.createElement('div'));
             }
-
-            // 날짜 생성
+    
             for (let date = 1; date <= lastDate; date++) {
                 const dateDiv = document.createElement('div');
                 dateDiv.className = "py-2 font-medium cursor-pointer hover:bg-gray-50 rounded-lg transition-colors relative flex items-center justify-center";
                 dateDiv.innerText = date;
-
-                // [중요] 날짜를 클릭하면 팝업을 띄우는 함수 연결
-                dateDiv.onclick = function() {
-                    // 여기에 날짜별 데이터를 다르게 보여주는 로직을 추가할 수 있습니다.
-                    // 현재는 팝업을 여는 함수만 호출합니다.
-                    openPopup(year, month + 1, date); 
-                };
-
+                
+                // 날짜 클릭 시 팝업 열기 연결
+                dateDiv.onclick = () => openPopup(year, month + 1, date);
+    
                 // 오늘 날짜 강조 (주황색 점)
                 if (date === now.getDate() && month === new Date().getMonth()) {
                     dateDiv.classList.add("text-primary", "font-bold");
@@ -214,21 +260,8 @@
                     dot.className = "w-1 h-1 bg-primary rounded-full absolute bottom-1";
                     dateDiv.appendChild(dot);
                 }
-
                 calendarDays.appendChild(dateDiv);
             }
-        }
-
-        // 팝업 열기 함수 수정 (날짜 정보를 인자로 받을 수 있게 준비)
-        function openPopup(year, month, date) {
-            // 팝업 내의 날짜 제목을 클릭한 날짜로 변경 (선택 사항)
-            const popupDateTitle = document.querySelector('#popup h2');
-            if (popupDateTitle) {
-                popupDateTitle.innerText = `${month}월 ${date}일`;
-            }
-            
-            document.getElementById('overlay').classList.add('opacity-100', 'pointer-events-auto');
-            document.getElementById('popup').classList.remove('translate-y-full');
         }
     </script>
 </body>

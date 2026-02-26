@@ -194,17 +194,20 @@
             statsList.innerHTML = ''; // 초기화
 
             data.stats.forEach(item => {
-                const row = `
-                    <div>
-                        <div class="flex justify-between text-[11px] mb-1">
-                            <span class="font-bold text-gray-700">${item.category}</span>
-                            <span class="text-gray-400">${item.count}회 (${item.percentage}%)</span>
-                        </div>
-                        <div class="w-full bg-gray-100 rounded-full h-1.5">
-                            <div class="h-1.5 rounded-full transition-all duration-700" style="width: ${item.percentage}%; background-color: ${item.color}"></div>
-                        </div>
-                    </div>
-                `;
+                    // 기존 구조를 유지하되, 내부 막대가 부모(회색 바)를 꽉 채우도록 수정합니다.
+                    const row = `
+                        <div class="mb-4">
+                            <div class="flex justify-between text-[11px] mb-1">
+                                <span class="font-bold text-gray-700">${item.category}</span>
+                                <span class="text-gray-400">${item.count}회 (${item.percentage}%)</span>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                                <div class="h-full rounded-full transition-all duration-700" 
+                                    style="width: ${item.percentage}%; background-color: ${item.color}">
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 statsList.insertAdjacentHTML('beforeend', row);
             });
 

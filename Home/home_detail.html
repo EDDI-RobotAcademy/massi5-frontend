@@ -41,7 +41,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100">
-                        <span class="text-[11px] font-bold text-primary">1일째 기록 중!</span>
+                        <span class="text-[11px] font-bold text-primary">30일째 기록 중!</span>
                     </div>
                     <span class="material-symbols-outlined text-gray-700">notifications</span>
                 </div>
@@ -64,7 +64,7 @@
                             <span id="display-mealtype" class="px-2 py-1 bg-gray-50 text-[10px] font-bold text-gray-400 rounded uppercase">외식</span>
                         </div>
                         <h3 id="display-menu" class="text-2xl font-bold mb-1">김치찌개</h3>
-                        <p class="text-sm text-gray-400 italic mb-6">"바삭하고 육즙이 가득해서 맛있었어요!"</p>
+                        <p class="text-sm text-gray-400 italic mb-6">한국인의 점심은 김치찌개! 맛있게 드셨나요?</p>
                         <div class="flex gap-3">
                             <button class="flex-1 h-14 bg-primary text-white font-bold rounded-2xl flex items-center justify-center gap-2">
                                 <span class="material-symbols-outlined">edit</span> 기록 수정하기
@@ -148,21 +148,30 @@
              * 페이지가 로드될 때 브라우저 저장소(localStorage)에서 
              * 사용자가 방금 기록한 메뉴와 음식 종류를 가져와 화면 업데이트
              */
-            window.onload = function() {
-                // 1. 저장된 데이터 가져오기
+             window.onload = function() {
+                // 1. 저장된 데이터 모두 가져오기
                 const savedMenu = localStorage.getItem('recentMenu');
                 const savedFoodType = localStorage.getItem('recentFoodType');
-                
-                // 2. 데이터가 있다면 화면 요소들 교체
+                const savedMealType = localStorage.getItem('recentMealType'); // 식사 유형 추가
+                const savedImage = localStorage.getItem('recentImage');       // 사진 데이터 추가
+
+                // 2. 메뉴 이름 & 카테고리 반영
                 if (savedMenu) {
                     document.getElementById('display-menu').innerText = savedMenu;
                     document.getElementById('display-foodtype').innerText = savedFoodType || "한식";
                     document.getElementById('insight-type').innerText = savedFoodType || "한식";
-                    
-                    // 3. 특정 키워드(예: 김치찌개)가 포함되면 관련 이미지로 변경하는 보너스 로직
-                    if(savedMenu.includes("김치찌개")) {
-                        document.getElementById('display-img').src = "https://images.unsplash.com/photo-1620002093398-8f16081af5ee?q=80&w=500";
-                    }
+                }
+
+                // 3. 식사 유형(외식/배달/집밥) 반영
+                if (savedMealType) {
+                    document.getElementById('display-mealtype').innerText = savedMealType;
+                }
+
+                // 4. 저장된 사진(노트북에서 선택한 파일) 반영 (핵심!)
+                if (savedImage) {
+                    const displayImg = document.getElementById('display-img');
+                    displayImg.src = savedImage;
+                    // 기존의 '김치찌개' 조건문 이미지 변경 로직은 이제 필요 없으므로 삭제하거나 무시됩니다.
                 }
             };
         </script>
